@@ -7,7 +7,6 @@ JQ_FLATTEN = """
         title:              .metadata.title,
         description:        .metadata.description,
         owner:              .spec.owner,
-        docs:               .metadata.annotations."backbase/docs-link",
         type:               .spec.type,
         lifecycle:          .spec.lifecycle,
         "subcomponent-of":  .spec.subcomponentOf,

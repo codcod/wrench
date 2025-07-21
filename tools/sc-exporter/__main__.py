@@ -14,7 +14,6 @@ FIELDS = (
     'metadata.title,'
     'metadata.description,'
     'spec.owner,'
-    'metadata.annotations.backbase/docs-link,'
     'spec.type,'
     'spec.lifecycle,'
     'spec.subcomponentOf,'
