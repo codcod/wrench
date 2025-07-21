@@ -1,6 +1,6 @@
 [project]
 name = "wrench"
-version = "0.1.0"
+version = "0.0.0"
 description = "Automate your development workflow with Wrench"
 readme = "README.md"
 requires-python = ">=3.11"
