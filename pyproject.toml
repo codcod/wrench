@@ -1,0 +1,199 @@
+[project]
+name = "wrench"
+version = "0.1.0"
+description = "Automate your development workflow with Wrench"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [
+  { name = "codcod"}
+]
+dependencies = [
+    "aiohttp>=3.10.8",
+    "jq>=1.10.0",
+    "multidict>=6.1.0",
+    "requests>=2.32.3",
+    "uvloop>=0.21.0",
+]
+
+[dependency-groups]
+dev = [
+  "pytest-asyncio>=0.21.0",
+  "pytest-coverage>=0.0",
+  "pytest>=7.0.0",
+  "python-semantic-release>=9.0.0",
+]
+
+[build-system]
+requires = ["uv_build"]
+build-backend = "uv_build"
+
+[tool.pyright]
+pythonVersion = "3.13"
+venv = ".venv"
+venvPath = "."
+typeCheckingMode = "basic" # Options: "off", "basic", "strict"
+
+include = ["src", "tests"]
+
+exclude = ["**/node_modules", "**/__pycache__", "**/*.pyc"]
+
+reportMissingImports = true # Report missing imports
+reportUnusedImports = true  # Report unused imports
+reportUnusedFunction = true # Report unused functions
+
+[tool.black]
+line-length = 88
+target-version = ["py313"]
+include = '\.pyi?$'
+exclude = '''(
+    /(
+        .git
+        | .mypy_cache
+        | .pytest_cache
+        | build
+        | dist
+    )/
+)'''
+skip-string-normalization = true
+fast = false
+
+[tool.ruff]
+line-length = 88
+indent-width = 4
+target-version = "py313"
+exclude = ["docs/**/*.py"]
+
+[tool.ruff.format]
+indent-style = "space"
+line-ending = "auto"
+quote-style = "single"
+skip-magic-trailing-comma = false
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]
+ignore = []
+
+fixable = ["ALL"]
+unfixable = ["B"]
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.lint.flake8-bugbear]
+# Allow default arguments like, e.g., `data: List[str] = fastapi.Query(None)`.
+extend-immutable-calls = [
+  "Depends",
+  "fastapi.Depends",
+  "fastapi.params.Depends",
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["wrench"]
+split-on-trailing-comma = true
+
+[tool.pytest.ini_options]
+# https://docs.pytest.org/en/latest/reference/customize.html
+minversion = "6.0"
+addopts = [
+  # "-v",
+  # "-q",
+  "--tb=short",  # line, auto, short, long, native, no
+  "--capture=no",
+  "--log-cli-level=INFO",
+  "--import-mode=importlib",
+  "--maxfail=10",
+  # "--disable-warnings",
+  # "--doctest-modules",
+  # "--cov=wrench",
+]
+testpaths = ["tests/unit"]
+pythonpath = ["src"]
+log_format = "%(asctime)s [%(levelname)-8s] [%(filename)s:%(lineno)s] %(message)s"
+log_date_format = "%H:%M:%S"
+asyncio_default_fixture_loop_scope = "function"
+filterwarnings = [
+  "ignore::DeprecationWarning",
+  "ignore::RuntimeWarning:unittest.mock",
+  "ignore:.*coroutine.*was never awaited.*:RuntimeWarning",
+]
+
+# Reminder:
+# '^file1\.py$',   # TOML literal string (single-quotes, no escaping necessary)
+# "^file2\\.py$",  # TOML basic string (double-quotes, backslash and other characters need escaping
+
+[tool.coverage.run]
+source = ["src"]
+branch = true
+omit = ["tests/*", "*/site-packages/*"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+omit = ["src/**/asgi.py"]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+]
+
+[tool.bandit]
+targets = ["src"]
+exclude_dirs = ["tests", ".venv"]
+skips = ["B101", "B301", "B601"]
+
+[tool.mypy]
+python_version = "3.13"
+warn_return_any = true
+warn_unused_configs = true
+exclude = [
+  '^file1\.py$',  # TOML literal string (single-quotes, no escaping necessary)
+  "^file2\\.py$", # TOML basic string (double-quotes, backslash and other characters need escaping)
+]
+
+[tool.semantic_release]
+version_toml = ["pyproject.toml:project.version"]
+version_variables = [
+    "src/wrench/__init__.py:__version__",
+]
+build_command = "uv build"
+dist_glob_patterns = ["dist/*"]
+major_on_zero = false
+allow_zero_version = true
+
+[tool.semantic_release.changelog]
+exclude_commit_patterns = [
+    "Merge pull request .*",
+    "Merge branch .*",
+]
+
+[tool.semantic_release.changelog.default_templates]
+changelog_file = "CHANGELOG.md"
+template_dir = "docs/templates"
+
+[tool.semantic_release.changelog.environment]
+block_start_string = "{%"
+block_end_string = "%}"
+variable_start_string = "{{"
+variable_end_string = "}}"
+comment_start_string = "{#"
+comment_end_string = "#}"
+trim_blocks = false
+lstrip_blocks = false
+newline_sequence = "\n"
+keep_trailing_newline = false
+extensions = []
+autoescape = true
+
+[tool.semantic_release.branches.main]
+match = "main"
+prerelease_token = "rc"
+prerelease = false
+
+[tool.semantic_release.commit_parser_options]
+allowed_tags = ["build", "chore", "ci", "docs", "feat", "fix", "perf", "style", "refactor", "test"]
+minor_tags = ["feat"]
+patch_tags = ["fix", "perf"]
+
+[tool.semantic_release.remote]
+name = "origin"
+type = "github"

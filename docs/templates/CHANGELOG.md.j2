@@ -1,0 +1,16 @@
+# CHANGELOG
+
+<!--next-version-placeholder-->
+
+{% for version, release in context.history.items() %}
+## {{ version.as_tag() }} ({{ release.tagged_date.strftime("%Y-%m-%d") }})
+
+{% for type_, commits in release.elements | groupby("type") %}
+### {{ type_.title() }}
+
+{% for commit in commits %}
+* {{ commit.descriptions[0] }}{% if commit.breaking %} **BREAKING CHANGE**{% endif %}
+{%- endfor %}
+
+{% endfor %}
+{% endfor %}
