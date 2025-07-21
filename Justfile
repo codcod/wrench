@@ -2,6 +2,25 @@
 # This file defines tasks for building, testing, linting, and running examples
 # Use `just --list` to see available tasks
 
+#
+# tools/jira:
+#         uv run -- python -m tools.jira_components --sep ';' --header no $(project)
+#
+# tools/sonar:
+#         uv run -- python -m tools.sonar_metrics --sep ';' --header no $(org)
+#
+# tools/sc:
+#         uv run -- python -m tools.softwarecatalog export --format csv --filename data/out/sc_entities.csv
+# #       uv run -- python -m tools.softwarecatalog export --format json |jq
+#
+# tools/gh:
+#         uv run -- python -m tools.github
+#
+# test:
+#         uv run -- pytest
+#
+
+
 # set dotenv-load
 
 ARGS_TEST := env("_UV_RUN_ARGS_TEST", "")
